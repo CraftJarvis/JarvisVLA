@@ -42,6 +42,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.3/clipboard.min.js"></script>
     
     <script src="js/app.js"></script>
+
+    <!-- <script>
+        document.getElementById('toggleSidebar').addEventListener('click', function() {
+            var sidebar = document.getElementById('sidebar');
+            var container = document.getElementById('main');
+            sidebar.classList.toggle('hidden');
+            container.classList.toggle('shifted');
+        });
+    </script> -->
 	
     <style>
         .nav-pills {
@@ -53,6 +62,31 @@
           top: 0;
           left: 0;
         }
+        /* .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200px;
+            height: 100%;
+            background-color: #f8f9fa;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar.hidden {
+            transform: translateX(-100%);
+        }
+
+        .container {
+            margin-left: 220px; 
+            transition: margin-left 0.3s ease;
+        }
+
+        .container.shifted {
+            margin-left: 20px; 
+        } */
     </style>
 </head>
 <!-- Google tag (gtag.js) -->
@@ -65,7 +99,22 @@
   gtag('config', 'G-ZVHB3THYJ9');
 </script>
 <body>
+    <!-- 添加侧边栏目录 -->
+    <!-- <nav id="sidebar" class="sidebar">
+        <button id="toggleSidebar" class="btn btn-secondary">Toggle Sidebar</button>
+        <ul>
+            <li><a href="#abstract">Abstract</a></li>
+            <li><a href="#real">Highlight</a></li>
+            <li><a href="#results">More Results</a></li>
+            <li><a href="#long">Long Rollout</a></li>
+            <li><a href="#fail">Failure Cases</a></li>
+            <li><a href="#datasets">Datasets</a></li>
+            <li><a href="#related-projects">Related Projects</a></li>
+            <li><a href="#bibtex">BibTex</a></li>
+        </ul>
+    </nav> -->
     <div class="container" id="main">
+
         <div class="row mt-4">
             <h2 class="col-md-12 text-center">
                 <b><font size="+6">JARVIS-VLA: Post-Training Large-Scale Vision Language Models to Play Visual Games with Keyboards and Mouse</font></b></br> 
@@ -148,6 +197,28 @@
                 </p>
             </div>
         </div>
+
+        <!-- <div class="row justify-content-md-center mt-4">
+            <div class="col-md-10 col-lg-8">
+                <h3 id="outlie">Outline</h3>
+
+                <p>
+                    <a type="button" href="#real" class="btn btn-primary">Highlight</a>
+                    <a type="button" href="#results" class="btn btn-success">More Results</a>
+                    <a type="button" href="#long" class="btn btn-warning">Long Rollout</a>
+                    <a type="button" href="#fail" class="btn btn-info">Failure Cases</a>
+                    <a type="button" href="#datasets" class="btn btn-danger">Datasets</a>
+                    <a type="button" href="#related-projects" class="btn btn-secondary">Related Projects</a>
+                    <a type="button" href="#bibtex" class="btn btn-primary">BibTex</a>
+                </p>
+
+                <!-- <p><a type="button" href="#genvideo" class="btn btn-primary">Generated Video and Language Plans</a></p>
+                <p><a type="button" href="#vlm" class="btn btn-secondary">Effect of Using Planning with VLMs and Video Models</a></p>
+                <p><a type="button" href="#real" class="btn btn-success">Real Executions</a></p>
+                <p><a type="button" href="#generalization" class="btn btn-info">Generalization</a></p>
+                <p><a type="button" href="#limitations" class="btn btn-warning">Limitations</a></p> -->
+            </div>
+        </div> -->
 
         <div class="row justify-content-md-center mt-4">
             <div class="col-md-10 col-lg-8">
@@ -540,7 +611,7 @@
 
         <div class="row justify-content-md-center mt-4">
             <div class="col-md-10 col-lg-8">
-                <h4 id="crafting">Crafting Items</h4>
+                <h4 id="craft">Crafting Items</h4>
                 <p></p>
 
                 <!--- Start of a block -->
@@ -617,6 +688,136 @@
 
                 <!--- Start of a block -->
                 <div class="card mb-4 mt-4 text-dark bg-light">
+                    <h5 class="card-header">Craft in the inventory.</h5>
+                    <div class="card-body">
+                        <div class="row justify-content-md-center mt-4">
+                            <div class="col-md-6 mb-2">
+                            <p>craft diamond from diamond block</p>
+                            <video width="100%" preload="metadata" playsinline controls>
+                                <source src="videos/craft_on_inventory/diamond.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <p>craft emerald from emerald block</p>
+                                <video width="100%" preload="metadata" playsinline controls>
+                                    <source src="videos/craft_on_inventory/emerald.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                        </div>
+                        <div class="row justify-content-md-center mt-4">
+                            <div class="col-md-6 mb-2">
+                            <p>craft melon seeds from melon piece</p>
+                            <video width="100%" preload="metadata" playsinline controls>
+                                <source src="videos/craft_on_inventory/melon_seeds.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <p>craft stone button from stone</p>
+                                <video width="100%" preload="metadata" playsinline controls>
+                                    <source src="videos/craft_on_inventory/stone_button.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--- End of a block --->
+
+                <!--- Start of a block -->
+                <div class="card mb-4 mt-4 text-dark bg-light">
+                    <h5 class="card-header">Craft in the inventory with recipe book.</h5>
+                    <div class="card-body">
+                        <div class="row justify-content-md-center mt-4">
+                            <div class="col-md-6 mb-2">
+                            <p>craft glowstone</p>
+                            <video width="100%" preload="metadata" playsinline controls>
+                                <source src="videos/craft_on_inventory_with_recipe_book/glowstone.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <p>craft stone pressure plate</p>
+                                <video width="100%" preload="metadata" playsinline controls>
+                                    <source src="videos/craft_on_inventory_with_recipe/stone_pressure_plate.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--- End of a block --->
+
+                <!--- Start of a block -->
+                <div class="card mb-4 mt-4 text-dark bg-light">
+                    <h5 class="card-header">Craft on the crafting table.</h5>
+                    <div class="card-body">
+                        <div class="row justify-content-md-center mt-4">
+                            <div class="col-md-6 mb-2">
+                            <p>craft acacia boat from acacia planks</p>
+                            <video width="100%" preload="metadata" playsinline controls>
+                                <source src="videos/craft_on_table/acacia_boat.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <p>craft oak slab</p>
+                                <video width="100%" preload="metadata" playsinline controls>
+                                    <source src="videos/craft_on_table/oak_slab.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                        </div>
+                        <div class="row justify-content-md-center mt-4">
+                            <div class="col-md-6 mb-2">
+                            <p>craft paper from sugar cane</p>
+                            <video width="100%" preload="metadata" playsinline controls>
+                                <source src="videos/craft_on_table/paper.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <p>craft spruce boat from spruce planks</p>
+                                <video width="100%" preload="metadata" playsinline controls>
+                                    <source src="videos/craft_on_table/spruce_boat.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--- End of a block --->
+
+                <!--- Start of a block -->
+                <div class="card mb-4 mt-4 text-dark bg-light">
+                    <h5 class="card-header">Craft on the table with recipe book.</h5>
+                    <div class="card-body">
+                        <div class="row justify-content-md-center mt-4">
+                            <div class="col-md-6 mb-2">
+                            <p>craft ladder from sticks</p>
+                            <video width="100%" preload="metadata" playsinline controls>
+                                <source src="videos/craft_on_table_with_recipe/craft_ladder.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <p>craft dark oak fence gate from dark oak planks</p>
+                                <video width="100%" preload="metadata" playsinline controls>
+                                    <source src="videos/craft_on_table_with_recipe/dark_oak_fense_gate.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                        </div>
+                        <div class="row justify-content-md-center mt-4">
+                            <div class="col-md-6 mb-2">
+                            <p>craft oak trapdoor</p>
+                            <video width="100%" preload="metadata" playsinline controls>
+                                <source src="videos/craft_on_table_with_recipe/oak_trapdoor.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <p>craft warped stairs</p>
+                                <video width="100%" preload="metadata" playsinline controls>
+                                    <source src="videos/craft_on_table_with_recipe/warped_stairs.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--- End of a block --->
+
+                <!--- Start of a block -->
+                <div class="card mb-4 mt-4 text-dark bg-light">
                     <h5 class="card-header">Others.</h5>
                     <div class="card-body">
                         <div class="row justify-content-md-center mt-4">
@@ -656,7 +857,7 @@
 
         <div class="row justify-content-md-center mt-4">
             <div class="col-md-10 col-lg-8">
-                <h3 id="real">Long rollout</h3>
+                <h3 id="long">Long rollout</h3>
                 <!-- <p>JARVIS-VLA can execute human language instructions in open-world Minecraft. We illustrate executions with different instructions below. </p> -->
                 
                 <div class="card mb-4 mt-4 text-dark bg-light">
@@ -685,7 +886,7 @@
         
         <div class="row justify-content-md-center mt-4">
             <div class="col-md-10 col-lg-8">
-                <h3 id="real">Failure cases analysis</h3>
+                <h3 id="fail">Failure cases analysis</h3>
                 <!-- <p>JARVIS-VLA can execute human language instructions in open-world Minecraft. We illustrate executions with different instructions below. </p> -->
                 
                 <div class="card mb-4 mt-4 text-dark bg-light">
@@ -743,7 +944,7 @@
 
         <div class="row justify-content-md-center">
             <div class="col-md-10 col-lg-8">
-                <h3 class="mt-4 mb-2">
+                <h3 id="datasets" class="mt-4 mb-2">
                     Datasets
                 </h3>
                 <p class="text-justify">
