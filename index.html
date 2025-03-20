@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>JARVIS-1: Open-world Multi-task Agents with Memory-Augmented Multimodal Language Models</title>
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">    
+
+    <meta name="description" content="JARVIS-VLA: Post-Training Large-Scale Vision Language Models to Play Visual Games with Keyboards and Mouse">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta itemprop="image" content="./images/architecture.png">
+
+
+     <!--FACEBOOK-->
+     <meta property="og:image" content="./images/architecture.png">
+     <meta property="og:image:type" content="image/png">
+     <meta property="og:image:width" content="1196">
+     <meta property="og:image:height" content="705">
+     <meta property="og:type" content="website" />
+     <meta property="og:url" content="https://craftjarvis.github.io/JarvisVLA"/>
+     <meta property="og:title" content="JARVIS-VLA: Post-Training Large-Scale Vision Language Models to Play Visual Games with Keyboards and Mouse" />
+     <meta property="og:description"
+         content="Project page for CraftJarvis JARVIS-VLA." />
+ 
+     <!--TWITTER-->
+     <meta name="twitter:card" content="summary_large_image" />
+     <meta name="twitter:title" content="JARVIS-VLA: Post-Training Large-Scale Vision Language Models to Play Visual Games with Keyboards and Mouse" />
+     <meta name="twitter:description"
+         content="Project page for CraftJarvis JARVIS-VLA." />
+     <meta name="twitter:image" content="./images/architecture.png" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.8.0/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
+    <link rel="stylesheet" href="css/app.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.8.0/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.3/clipboard.min.js"></script>
+    
+    <script src="js/app.js"></script>
+	
+    <style>
+        .nav-pills {
+          position: relative;
+          display: inline;
+        }
+        .imtip {
+          position: absolute;
+          top: 0;
+          left: 0;
+        }
+    </style>
+</head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-LHNLP4KVZV"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-LHNLP4KVZV');
+</script>
+<body>
+    <div class="container" id="main">
+        <div class="row mt-4">
+            <h2 class="col-md-12 text-center">
+                <b><font size="+6">JARVIS-VLA: Post-Training Large-Scale Vision Language Models to Play Visual Games with Keyboards and Mouse</font></b></br> 
+            </h2>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <ul class="list-inline">
+                <br>
+                <li><a href="" target="_blank">Muyao Li</a><sup>*</sup></li>
+                <li><a href="https://zhwang4ai.github.io/" target="_blank">Zihao Wang</a><sup>*</sup></li>
+                <li><a href="" target="_blank">Kaichen He</a></li>
+                <li><a href="https://jeasinema.github.io/" target="_blank">Xiaojian Ma</a></li>
+                <li><a href="https://scholar.google.com/citations?user=KVzR1XEAAAAJ&hl=en" target="_blank">Yitao Liang</a></li>
+                <br>
+                <br>
+                    <a href="https://www.craftjarvis.github.io/">
+                        <image src="images/favicon.ico" height="40px"> 
+                            <font size="4">Team CraftJarvis</font><br>
+                    </a>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row justify-content-md-center">
+            <div class="col-md-2 text-center">
+                <a href="./files/jarvis_vla_draft.pdf">
+                <image src="images/paper.png" height="50px">
+                <h4><strong>Paper</strong></h4>
+                </a>
+            </div>
+            <div class="col-md-2 text-center">
+                <a href="https://github.com/CraftJarvis/JarvisVLA">
+                <image src="images/github.png" height="50px">
+                <h4><strong>Code</strong></h4>
+                </a>
+            </div>
+            <div class="col-md-2 text-center">
+                <a href="#results">
+                <image src="images/video.png" height="50px">
+                <h4><strong>Video</strong></h4>
+                </a>
+            </div>
+            <!-- <div class="col-md-2 text-center">
+                <a href="https://twitter.com/jeasinema/status/1723900032653643796">
+                <image src="images/twitter.png" height="50px">
+                <h4><strong>Twitter</strong></h4>
+                </a>
+            </div> -->
+        </div>
+
+        <!-- <div class="row justify-content-md-center">
+            <div class="col-md-10 col-lg-8">
+                    <image src="images/minecraft_technical_tree.png" width="100%"></image>
+                </video>
+            </div>
+        </div> -->
+        <div class="row justify-content-md-center">
+            <div class="col-md-10 col-lg-8">
+                <!-- <video id="v0" width="100%" preload="metadata" playsinline muted onclick="setAttribute('controls', 'true');" loop autoplay>
+                    <source src="videos/jarvis.mp4" type="video/mp4">
+                </video> -->
+                <p style="text-align:center;">
+                    <image src="images/architecture.png" width="100%">
+                </p>
+            </div>
+        </div>
+
+        <div class="row justify-content-md-center">
+            <div class="col-md-10 col-lg-8">
+                <h3 class="mt-4 mb-2">
+                    Abstract
+                </h3>
+                <p class="text-justify">
+                    Achieving human-like planning and control with visual observations in an open world is a key milestone for more functional generalist agents. Visual Language Action (VLA) models, pretrained on large-scale web datasets, have shown promise in decision-making tasks. However, previous work has primarily focused on action post-training, often neglecting enhancements to the foundational model itself. In response, we introduce a novel approach, \textit{Act from Visual Language Post-Training}, which refines Visual Language Models (VLMs) through visual and linguistic guidance in a self-supervised manner. This enhancement improves the models’ capabilities in world knowledge, visual recognition, and spatial grounding in open-world environments. Our experiments demonstrate that post-training on non-trajectory tasks leads to a significant 40\% improvement over the best agent baseline on a diverse set of atomic tasks. Additionally, we show that our approach outperforms traditional imitation learning-based VLA models in Minecraft. We will open-source the code, models, and datasets to foster further research.
+                </p>
+                <p style="text-align:center;">
+                    <image src="images/pipeline.png" width="100%">
+                </p>
+            </div>
+        </div>
+
+        <div class="row justify-content-md-center mt-4">
+            <div class="col-md-10 col-lg-8">
+                <h3 id="real">Master thousands of skills in Minecraft.</h3>
+                <p>JARVIS-VLA can execute human language instructions in open-world Minecraft. We illustrate executions with different instructions below. </p>
+                
+                <div class="card mb-4 mt-4 text-dark bg-light">
+                    <h5 class="card-header">Diverse Instructions</h5>
+                    <div class="card-body">
+                        <div class="row justify-content-md-center mt-4">
+                            <div class="col-md-6 mb-2">
+                            <p>Smelt iron ingots from iron ores</p>
+                            <video width="100%" preload="metadata" playsinline controls>
+                                <source src="videos/highlight/iron_ingot.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <p>Craft iron swords with iron ingots</p>
+                                <video width="100%" preload="metadata" playsinline controls>
+                                    <source src="videos/highlight/iron_sword.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                        </div>
+                        <div class="row justify-content-md-center mt-4">
+                            <div class="col-md-6 mb-2">
+                                <p>Kill sheeps with sword</p>
+                                <video width="100%" preload="metadata" playsinline controls>
+                                    <source src="videos/highlight/kill_sheep.mp4" type="video/mp4">
+                                </video>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <p>Mine large ferns</p>
+                                <video width="100%" preload="metadata" playsinline controls>
+                                    <source src="videos/highlight/mine_large_fern.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                        </div>
+                        <div class="row justify-content-md-center mt-4">
+                            <div class="col-md-6 mb-2">
+                                <p>Collect torch</p>
+                                <video width="100%" preload="metadata" playsinline controls>
+                                    <source src="videos/highlight/mine_torch.mp4" type="video/mp4">
+                                </video>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <p>Cook popped chorus fruit in furnace</p>
+                                <video width="100%" preload="metadata" playsinline controls>
+                                    <source src="videos/highlight/popped_chorus_fruit.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <p>JARVIS-VLA can reflect on its own actions and re-generate new actions.</p>
+                
+                <div class="card mb-4 mt-4 text-dark bg-light">
+                    <h5 class="card-header">Reflections</h5>
+                    <div class="card-body">
+                        <div class="row justify-content-md-center mt-4">
+                            <div class="col-md-6 mb-2">
+                                <p>Craft gray wool</p>
+                                <video width="100%" preload="metadata" playsinline controls>
+                                    <source src="videos/craft_with_reflection/gray_wool.mp4" type="video/mp4">
+                                </video>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <p>Craft chiseled sandstone</p>
+                                <video width="100%" preload="metadata" playsinline controls>
+                                    <source src="videos/craft_with_reflection/chiseled_sandstone.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="row justify-content-md-center mt-4">
+            <div class="col-md-10 col-lg-8">
+                <h3 id="results">More Results</h3>
+                <p>Below we share some additional results of JARVIS-VLA on Minecraft.
+                </p>
+
+                <p>
+                    <a type="button" href="#cook" class="btn btn-secondary">Cook</a>
+                    <a type="button" href="#harvest" class="btn btn-success">Harvest</a>
+                    <a type="button" href="#kill" class="btn btn-danger">Kill Mobs</a>
+                    <a type="button" href="#mine" class="btn btn-warning">Mine</a>
+                    <a type="button" href="#combat" class="btn btn-info">Combat</a>
+                    <a type="button" href="#smelt" class="btn btn-dark">Smelt</a>
+                    <a type="button" href="#craft" class="btn btn-primary">Craft</a>
+                </p>
+
+                <!-- <p><a type="button" href="#genvideo" class="btn btn-primary">Generated Video and Language Plans</a></p>
+                <p><a type="button" href="#vlm" class="btn btn-secondary">Effect of Using Planning with VLMs and Video Models</a></p>
+                <p><a type="button" href="#real" class="btn btn-success">Real Executions</a></p>
+                <p><a type="button" href="#generalization" class="btn btn-info">Generalization</a></p>
+                <p><a type="button" href="#limitations" class="btn btn-warning">Limitations</a></p> -->
+            </div>
+        </div>
+
+        <div class="row justify-content-md-center mt-4">
+            <div class="col-md-10 col-lg-8">
+                <h4 id="cook">Cook</h4>
+                <p></p>
+
+                <!--- Start of a block -->
+                <div class="card mb-4 mt-4 text-dark bg-light">
+                    <h5 class="card-header">Cooking foods with furnace.</h5>
+                    <div class="card-body">
+                        <div class="row justify-content-md-center mt-4">
+                            <div class="col-md-6 mb-2">
+                            <p>cook baked potato</p>
+                            <video width="100%" preload="metadata" playsinline controls>
+                                <source src="videos/cook/baked_potato.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <p>cook chicken </p>
+                                <video width="100%" preload="metadata" playsinline controls>
+                                    <source src="videos/cook/cook_chicken.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                        </div>
+                        <div class="row justify-content-md-center mt-4">
+                            <div class="col-md-6 mb-2">
+                            <p>cook beef</p>
+                            <video width="100%" preload="metadata" playsinline controls>
+                                <source src="videos/cook/cooked_beef.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <p>cook cod</p>
+                                <video width="100%" preload="metadata" playsinline controls>
+                                    <source src="videos/cook/cooked_cod.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--- End of a block --->
+            </div>
+
+        </div>
+
+        <div class="row justify-content-md-center mt-4">
+            <div class="col-md-10 col-lg-8">
+                <h4 id="harvest">Harvest</h4>
+                <p></p>
+
+                <!--- Start of a block -->
+                <div class="card mb-4 mt-4 text-dark bg-light">
+                    <h5 class="card-header">Harvesting plants.</h5>
+                    <div class="card-body">
+                        <div class="row justify-content-md-center mt-4">
+                            <div class="col-md-6 mb-2">
+                            <p>harvest grass</p>
+                            <video width="100%" preload="metadata" playsinline controls>
+                                <source src="videos/harvest/grass.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <p>harvest melon </p>
+                                <video width="100%" preload="metadata" playsinline controls>
+                                    <source src="videos/harvest/melon.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                        </div>
+                        <div class="row justify-content-md-center mt-4">
+                            <div class="col-md-6 mb-2">
+                            <p>harvest sugar cane</p>
+                            <video width="100%" preload="metadata" playsinline controls>
+                                <source src="videos/harvest/suger_cane.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <p>harvest sunflower</p>
+                                <video width="100%" preload="metadata" playsinline controls>
+                                    <source src="videos/harvest/sunflower.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--- End of a block --->
+            </div>
+
+        </div>
+
+        <div class="row justify-content-md-center mt-4">
+            <div class="col-md-10 col-lg-8">
+                <h4 id="kill">Kill</h4>
+                <p></p>
+
+                <!--- Start of a block -->
+                <div class="card mb-4 mt-4 text-dark bg-light">
+                    <h5 class="card-header">Kill mobs.</h5>
+                    <div class="card-body">
+                        <div class="row justify-content-md-center mt-4">
+                            <div class="col-md-6 mb-2">
+                            <p>kill chicken</p>
+                            <video width="100%" preload="metadata" playsinline controls>
+                                <source src="videos/kill/kill_chicken.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <p>kill cow </p>
+                                <video width="100%" preload="metadata" playsinline controls>
+                                    <source src="videos/kill/kill_cow.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--- End of a block --->
+            </div>
+
+        </div>
+
+        <div class="row justify-content-md-center mt-4">
+            <div class="col-md-10 col-lg-8">
+                <h4 id="mine">Mine</h4>
+                <p></p>
+
+                <!--- Start of a block -->
+                <div class="card mb-4 mt-4 text-dark bg-light">
+                    <h5 class="card-header">Mine ore with pickaxe.</h5>
+                    <div class="card-body">
+                        <div class="row justify-content-md-center mt-4">
+                            <div class="col-md-6 mb-2">
+                                <p>mine diamond ore</p>
+                                <video width="100%" preload="metadata" playsinline controls>
+                                    <source src="videos/mine_ore_with_pickaxe/diamond.mp4" type="video/mp4">
+                                </video>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <p>mine iron ore </p>
+                                <video width="100%" preload="metadata" playsinline controls>
+                                    <source src="videos/mine_ore_with_pickaxe/iron_ore.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                        </div>
+                        <div class="row justify-content-md-center mt-4">
+                            <div class="col-md-6 mb-2">
+                            <p>mine coal ore</p>
+                            <video width="100%" preload="metadata" playsinline controls>
+                                <source src="videos/mine_ore_with_pickaxe/coal.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <p>mine mossy stone bricks</p>
+                                <video width="100%" preload="metadata" playsinline controls>
+                                    <source src="videos/mine_ore_with_pickaxe/mossy_stone_bricks.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--- End of a block --->
+
+                <!--- Start of a block -->
+                <div class="card mb-4 mt-4 text-dark bg-light">
+                    <h5 class="card-header">Mine blocks with tool.</h5>
+                    <div class="card-body">
+                        <div class="row justify-content-md-center mt-4">
+                            <div class="col-md-6 mb-2">
+                            <p>Chop acacia door</p>
+                            <video width="100%" preload="metadata" playsinline controls>
+                                <source src="videos/mine_with_tool/acacia_door.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <p>Mine purple bed </p>
+                                <video width="100%" preload="metadata" playsinline controls>
+                                    <source src="videos/mine_with_tool/purple_bed.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                        </div>
+                        <div class="row justify-content-md-center mt-4">
+                            <div class="col-md-6 mb-2">
+                            <p>mine sand with shovel</p>
+                            <video width="100%" preload="metadata" playsinline controls>
+                                <source src="videos/mine_with_tool/sand.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <p>Mine spruce logs</p>
+                                <video width="100%" preload="metadata" playsinline controls>
+                                    <source src="videos/mine_with_tool/spurce_log.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--- End of a block --->
+            </div>
+
+        </div>
+
+        <div class="row justify-content-md-center mt-4">
+            <div class="col-md-10 col-lg-8">
+                <h4 id="combat">Combat</h4>
+                <p></p>
+
+                <!--- Start of a block -->
+                <div class="card mb-4 mt-4 text-dark bg-light">
+                    <h5 class="card-header">Combating monsters.</h5>
+                    <div class="card-body">
+                        <div class="row justify-content-md-center mt-4">
+                            <div class="col-md-6 mb-2">
+                            <p>combat skeleton</p>
+                            <video width="100%" preload="metadata" playsinline controls>
+                                <source src="videos/combat/combat_skeleton.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <p>combat spider </p>
+                                <video width="100%" preload="metadata" playsinline controls>
+                                    <source src="videos/combat/combat_spider.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                        </div>
+                        <div class="row justify-content-md-center mt-4">
+                            <div class="col-md-6 mb-2">
+                            <p>combat zombie</p>
+                            <video width="100%" preload="metadata" playsinline controls>
+                                <source src="videos/combat/combat_zombie.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <p>combat zombie with pumpkin </p>
+                                <video width="100%" preload="metadata" playsinline controls>
+                                    <source src="videos/combat/combat_zombie_pumpkin.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--- End of a block --->
+            </div>
+
+        </div>
+
+        <div class="row justify-content-md-center mt-4">
+            <div class="col-md-10 col-lg-8">
+                <h4 id="smelt">Smelt</h4>
+                <p></p>
+
+                <!--- Start of a block -->
+                <div class="card mb-4 mt-4 text-dark bg-light">
+                    <h5 class="card-header">Smelting ores.</h5>
+                    <div class="card-body">
+                        <div class="row justify-content-md-center mt-4">
+                            <div class="col-md-6 mb-2">
+                            <p>smelt brick</p>
+                            <video width="100%" preload="metadata" playsinline controls>
+                                <source src="videos/smelt_ore/brick.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <p>smelt nether brick </p>
+                                <video width="100%" preload="metadata" playsinline controls>
+                                    <source src="videos/smelt_ore/nether_brick.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                        </div>
+                        <div class="row justify-content-md-center mt-4">
+                            <div class="col-md-6 mb-2">
+                            <p>smelt stone</p>
+                            <video width="100%" preload="metadata" playsinline controls>
+                                <source src="videos/smelt_ore/stone.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <p>smelt terracotta</p>
+                                <video width="100%" preload="metadata" playsinline controls>
+                                    <source src="videos/smelt_ore/terracotta.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--- End of a block --->
+            </div>
+
+        </div>
+
+        <div class="row justify-content-md-center mt-4">
+            <div class="col-md-10 col-lg-8">
+                <h4 id="crafting">Crafting Items</h4>
+                <p></p>
+
+                <!--- Start of a block -->
+                <div class="card mb-4 mt-4 text-dark bg-light">
+                    <h5 class="card-header">Armors crafting.</h5>
+                    <div class="card-body">
+                        <div class="row justify-content-md-center mt-4">
+                            <div class="col-md-6 mb-2">
+                            <p>craft diamond leggings</p>
+                            <video width="100%" preload="metadata" playsinline controls>
+                                <source src="videos/craft_armor/diamond_legging.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <p>craft gold helmet</p>
+                                <video width="100%" preload="metadata" playsinline controls>
+                                    <source src="videos/craft_armor/gold_helmet.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                        </div>
+                        <div class="row justify-content-md-center mt-4">
+                            <div class="col-md-6 mb-2">
+                            <p>craft iron chestplate</p>
+                            <video width="100%" preload="metadata" playsinline controls>
+                                <source src="videos/craft_armor/iron_chestplate.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <p>craft leather boots</p>
+                                <video width="100%" preload="metadata" playsinline controls>
+                                    <source src="videos/craft_armor/leather_boots.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--- End of a block --->
+
+                <!--- Start of a block -->
+                <div class="card mb-4 mt-4 text-dark bg-light">
+                    <h5 class="card-header">Tools crafting.</h5>
+                    <div class="card-body">
+                        <div class="row justify-content-md-center mt-4">
+                            <div class="col-md-6 mb-2">
+                            <p>craft diamond sword</p>
+                            <video width="100%" preload="metadata" playsinline controls>
+                                <source src="videos/craft_tools/diamond_sword.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <p>craft gold hoe</p>
+                                <video width="100%" preload="metadata" playsinline controls>
+                                    <source src="videos/craft_tools/gold_hoe.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                        </div>
+                        <div class="row justify-content-md-center mt-4">
+                            <div class="col-md-6 mb-2">
+                            <p>craft iron shovel</p>
+                            <video width="100%" preload="metadata" playsinline controls>
+                                <source src="videos/craft_tools/iron_shovel.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <p>craft wooden pickaxe</p>
+                                <video width="100%" preload="metadata" playsinline controls>
+                                    <source src="videos/craft_tools/wooden_pickaxe.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--- End of a block --->
+
+                <!--- Start of a block -->
+                <div class="card mb-4 mt-4 text-dark bg-light">
+                    <h5 class="card-header">Others.</h5>
+                    <div class="card-body">
+                        <div class="row justify-content-md-center mt-4">
+                            <div class="col-md-6 mb-2">
+                            <p>craft crafting table</p>
+                            <video width="100%" preload="metadata" playsinline controls>
+                                <source src="videos/craft_others/crafting_table.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <p>craft dark prismarine stair</p>
+                                <video width="100%" preload="metadata" playsinline controls>
+                                    <source src="videos/craft_others/dark_prismarine_stair.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                        </div>
+                        <div class="row justify-content-md-center mt-4">
+                            <div class="col-md-6 mb-2">
+                            <p>craft diorite slab</p>
+                            <video width="100%" preload="metadata" playsinline controls>
+                                <source src="videos/craft_others/diorite_slab.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <p>craft torch</p>
+                                <video width="100%" preload="metadata" playsinline controls>
+                                    <source src="videos/craft_others/torch.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--- End of a block --->
+            </div>
+
+        </div>
+
+        <div class="row justify-content-md-center mt-4">
+            <div class="col-md-10 col-lg-8">
+                <h3 id="real">Long rollout</h3>
+                <!-- <p>JARVIS-VLA can execute human language instructions in open-world Minecraft. We illustrate executions with different instructions below. </p> -->
+                
+                <div class="card mb-4 mt-4 text-dark bg-light">
+                    <h5 class="card-header">long video</h5>
+                    <div class="card-body">
+                        <div class="row justify-content-md-center mt-4">
+                            <div class="col-md-6 mb-2">
+                            <p>mine ores</p>
+                            <video width="100%" preload="metadata" playsinline controls>
+                                <source src="videos/long_video/mining.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <p>survive in night</p>
+                                <video width="100%" preload="metadata" playsinline controls>
+                                    <source src="videos/long_video/survive_night.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        
+        <div class="row justify-content-md-center mt-4">
+            <div class="col-md-10 col-lg-8">
+                <h3 id="real">Failure cases analysis</h3>
+                <!-- <p>JARVIS-VLA can execute human language instructions in open-world Minecraft. We illustrate executions with different instructions below. </p> -->
+                
+                <div class="card mb-4 mt-4 text-dark bg-light">
+                    <h5 class="card-header">Failures</h5>
+                    <div class="card-body">
+                        <div class="row justify-content-md-center mt-4">
+                            <div class="col-md-6 mb-2">
+                            <p>craft arrow</p>
+                            <video width="100%" preload="metadata" playsinline controls>
+                                <source src="videos/failed/arrow.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <p>smelt charcoal</p>
+                                <video width="100%" preload="metadata" playsinline controls>
+                                    <source src="videos/failed/coal_fail.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                        </div>
+                        <div class="row justify-content-md-center mt-4">
+                            <div class="col-md-6 mb-2">
+                                <p>combat creeper</p>
+                                <video width="100%" preload="metadata" playsinline controls>
+                                    <source src="videos/failed/fail_creeper.mp4" type="video/mp4">
+                                </video>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <p>Combat enderman</p>
+                                <video width="100%" preload="metadata" playsinline controls>
+                                    <source src="videos/failed/fail_kill_enderman.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                        </div>
+                        <div class="row justify-content-md-center mt-4">
+                            <div class="col-md-6 mb-2">
+                                <p>mine sand slab</p>
+                                <video width="100%" preload="metadata" playsinline controls>
+                                    <source src="videos/failed/fail_sand_slab.mp4" type="video/mp4">
+                                </video>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <p>craft iron axe</p>
+                                <video width="100%" preload="metadata" playsinline controls>
+                                    <source src="videos/failed/failed_iorn_axe.mp4" type="video/mp4">
+                            </video>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
+
+
+        <div class="row justify-content-md-center">
+            <div class="col-md-10 col-lg-8">
+                <h3 class="mt-4 mb-2">
+                    Datasets
+                </h3>
+                <p class="text-justify">
+                    JARVIS-VLA models can post-train on various vision-language datasets using a unified tokenizer and support diverse vision-language applications, such as question answering, image captioning, image/video question answering, visual grounding with bounding box, and decision-making. More examples can be found in <a href="https://huggingface.co/datasets/CraftJarvis/minecraft-vla-sft">huggingface datasets repository</a>.
+                </p>
+                <p style="text-align:center;">
+                    <image src="images/datasets.png" width="100%">
+                </p>
+            </div>
+        </div>
+
+
+
+        <div class="row justify-content-md-center mt-4">
+            <div class="col-md-10 col-lg-8">
+                <h4>Related Projects</h4>
+                <p>Check out some of our related projects below! </p>
+
+                <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
+
+                <tr>
+                    <td style="padding:20px;width:25%;vertical-align:middle">
+                        <img src="images/2407.00114.png" alt="OmniJARVIS" width="240" style="border-style: none">
+                    </td>
+                    <td width="75%" valign="middle">
+                        <a href="https://arxiv.org/abs/2407.00114/" target="_blank">
+                        <papertitle>OmniJARVIS: Unified Vision-Language-Action Tokenization Enables Open-World Instruction Following Agents</papertitle>
+                        <br>NeurIPS 2024</br>
+                        </a>
+                        <p> 
+                            An hierarchical open-ended agent based on latent space that can answer questions and follow instructions in open-world Minecraft.
+                            We use self-supervised behavior tokenizer to encode the action sequences and build the Vision-Language-Action (VLA) models upon the pretrained vision language models. 
+                        </p>
+                        <br>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="padding:20px;width:25%;vertical-align:middle">
+                        <img src="images/2311.05997.png" alt="JARVIS-1" width="240" style="border-style: none">
+                    </td>
+                    <td width="75%" valign="middle">
+                        <a href="https://arxiv.org/abs/2311.05997/" target="_blank">
+                            <papertitle>JARVIS-1: Open-World Multi-task Agents with Memory-Augmented Multimodal Language Models</papertitle>
+                            <br>T-PAMI 2024</br>
+                        </a>
+                        <p> 
+                            This work introduces JARVIS-1, an open-world agent that can perceive multimodal input (visual observations and human instructions), generate sophisticated plans, and perform embodied control, all within the popular yet challenging open-world Minecraft universe.
+                            JARVIS-1 is capable of completing over 200 different tasks and performs exceptionally well in short-horizon tasks.
+                        </p>
+                        <br>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td style="padding:20px;width:25%;vertical-align:middle">
+                        <img src="images/2302.01560.png" alt="DEPS" width="240" style="border-style: none">
+                    </td>
+                    <td width="75%" valign="middle">
+                        <a href="https://arxiv.org/abs/2302.01560/" target="_blank">
+                        <papertitle>Describe, Explain, Plan and Select: Interactive Planning with Large Language Models Enables Open-World Multi-Task Agents</papertitle>
+                        <br>NeurIPS 2023</br>
+                        </a>
+                        <p> 
+                            DEPS is an interactive planning approach based on Large Language Models (LLMs) for open-ended multi-task agents. It helps with better error correction from the feedback during the long-haul planning, while also bringing the sense of proximity via goal Selector, a learnable module that ranks parallel sub-goals based on the estimated steps of completion and improves the original plan accordingly.  
+                        </p>
+                        <br>
+                    </td>
+                </tr>
+
+            </tbody></table>
+
+            </div>
+        </div>
+
+        <div class="row justify-content-md-center">
+            <div class="col-md-10 col-lg-8">
+                <h3 class="mt-4 mb-2">BibTex</h3>
+                <pre><code>
+@article{li2025jarvisvla,
+  title   = {JARVIS-VLA: Post-Training Large-Scale Vision Language Models to Play Visual Games with Keyboards and Mouse},
+  author  = {Muyao Li and Zihao Wang and Kaichen He and Xiaojian Ma and Yitao Liang},
+  year    = {2025}
+}
+                </code></pre>
+            </div>
+        </div>
+        
+        
+        <div class="row justify-content-md-center">
+            <div class="col-md-10 col-lg-8">
+                <div class="form-group col-md-12">
+                    <textarea id="bibtex" class="form-control" readonly>
+</textarea>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script>hljs.highlightAll();</script>
+</body>
+</html>
